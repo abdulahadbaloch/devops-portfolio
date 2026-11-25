@@ -1,0 +1,264 @@
+// Main SCSS entrypoint
+@import "bootstrap-custom";
+@import "theme";
+@import "components";
+
+html {
+  scroll-behavior: auto; // Lenis handles smooth scrolling
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Headings and titles always use theme text
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+}
+
+// Dynamic Scrolled Navbar
+.scrolled-navbar {
+  background: var(--header-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.nav-pill-container {
+  background: var(--nav-pill-bg) !important;
+  border: 1px solid var(--border-subtle) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+// Light theme overrides to ensure maximum legibility and zero invisible text
+[data-theme='light'] {
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  // Force all headings and brand texts to dark charcoal in light mode
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6,
+  .section-title {
+    color: var(--text-heading) !important;
+  }
+
+  // Any text-white outside isolated dark components (like terminal or cyber button)
+  .text-white:not(.terminal-window *):not(.btn-cyber-primary *):not(.btn-cyber-primary):not(.badge) {
+    color: var(--text-heading) !important;
+  }
+
+  .text-slate-200:not(.terminal-window *),
+  .text-slate-300:not(.terminal-window *) {
+    color: var(--text-secondary) !important;
+  }
+
+  .text-slate-400:not(.terminal-window *) {
+    color: var(--text-muted) !important;
+  }
+
+  .text-secondary {
+    color: var(--text-secondary) !important;
+  }
+
+  // Surface and card backgrounds in light mode
+  .glass-card {
+    background: var(--bg-glass) !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: var(--card-shadow) !important;
+
+    &::before {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), transparent 60%) !important;
+    }
+
+    &:hover {
+      border-color: var(--border-accent) !important;
+      box-shadow: var(--glow-primary), var(--card-shadow) !important;
+    }
+  }
+
+  .bg-slate-900:not(.terminal-window *) {
+    background-color: var(--bg-surface-elevated) !important;
+    border-color: var(--border-medium) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .bg-slate-950:not(.terminal-window *) {
+    background-color: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .border-white\/10 {
+    border-color: var(--border-subtle) !important;
+  }
+
+  .border-white\/20 {
+    border-color: var(--border-medium) !important;
+  }
+
+  .border-white\/30 {
+    border-color: var(--border-accent) !important;
+  }
+
+  // Form controls in light mode
+  .form-control {
+    background-color: var(--input-bg) !important;
+    color: var(--input-text) !important;
+    border-color: var(--input-border) !important;
+
+    &::placeholder {
+      color: var(--input-placeholder) !important;
+    }
+
+    &:focus {
+      background-color: var(--input-bg) !important;
+      color: var(--input-text) !important;
+      border-color: var(--accent-cyan) !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2) !important;
+    }
+  }
+
+  .form-label {
+    color: var(--text-heading) !important;
+  }
+
+  // Badges & Tech Chips
+  .tech-chip {
+    background: rgba(2, 132, 199, 0.08) !important;
+    border-color: rgba(2, 132, 199, 0.25) !important;
+    color: #0369a1 !important;
+
+    &:hover {
+      background: rgba(2, 132, 199, 0.16) !important;
+      color: #0c4a6e !important;
+    }
+  }
+
+  .section-badge {
+    background: rgba(2, 132, 199, 0.1) !important;
+    border-color: rgba(2, 132, 199, 0.3) !important;
+    color: #0284c7 !important;
+  }
+
+  .btn-cyber-secondary {
+    background: var(--bg-surface) !important;
+    color: var(--text-heading) !important;
+    border-color: var(--border-medium) !important;
+
+    &:hover {
+      background: rgba(2, 132, 199, 0.08) !important;
+      color: var(--text-accent) !important;
+      border-color: var(--border-accent) !important;
+    }
+  }
+
+  // Modals & Offcanvas in light mode
+  .modal-content {
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-medium) !important;
+  }
+
+  .modal-header,
+  .modal-footer {
+    background-color: #f8fafc !important;
+    border-color: var(--border-subtle) !important;
+  }
+
+  .offcanvas {
+    background-color: #ffffff !important;
+    color: var(--text-primary) !important;
+
+    .offcanvas-header {
+      border-color: var(--border-subtle) !important;
+    }
+  }
+
+  .timeline-container .timeline-item .timeline-node {
+    background: #0284c7 !important;
+    box-shadow: 0 0 15px rgba(2, 132, 199, 0.5) !important;
+
+    &::after {
+      border-color: rgba(2, 132, 199, 0.3) !important;
+    }
+  }
+
+  .timeline-container .timeline-progress-line {
+    background: linear-gradient(180deg, #0284c7 0%, #059669 100%) !important;
+  }
+}
+
+// Custom background mesh & ambient grid
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+
+  .ambient-glow-1 {
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    top: -15%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 70%);
+    filter: blur(80px);
+  }
+
+  .ambient-glow-2 {
+    position: absolute;
+    width: 550px;
+    height: 550px;
+    border-radius: 50%;
+    bottom: 20%;
+    left: -10%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+    filter: blur(80px);
+  }
+
+  .grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+}
+
+// Respect reduced motion
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .custom-cursor-dot,
+  .custom-cursor-ring {
+    display: none !important;
+  }
+}
+
+// Selection styling
+::selection {
+  background: rgba(0, 240, 255, 0.3);
+  color: #fff;
+}
