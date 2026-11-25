@@ -1,0 +1,389 @@
+// ---------------------------------------------------------------------------
+// Motion: hero entrance, pipeline graphic, scroll reveal, hover polish.
+// Everything here is switched off for prefers-reduced-motion (bottom of file).
+// ---------------------------------------------------------------------------
+:root {
+  --done: #2f8f5b;
+}
+
+:root[data-theme='dark'] {
+  --done: #5cc48c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --done: #5cc48c;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 30px) scale(1.08);
+  }
+}
+
+// One 10s cycle per stage; stages are offset by 1.2s (12%) so they run in turn.
+@keyframes step-cycle {
+  0%,
+  2% {
+    background: var(--border-strong);
+    box-shadow: none;
+  }
+  4% {
+    background: var(--accent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  10% {
+    background: var(--accent);
+    box-shadow: 0 0 0 8px transparent;
+  }
+  12%,
+  88% {
+    background: var(--done);
+    box-shadow: none;
+  }
+  94%,
+  100% {
+    background: var(--border-strong);
+    box-shadow: none;
+  }
+}
+
+@keyframes bar-fill {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  62%,
+  88% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  96%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+// Hero entrance: children rise in one after another.
+.hero-copy > * {
+  animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@for $i from 1 through 7 {
+  .hero-copy > :nth-child(#{$i}) {
+    animation-delay: #{($i - 1) * 90}ms;
+  }
+}
+
+.pipeline {
+  animation: fade-up 0.8s 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+// Hero layout and backdrop
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 48px;
+  align-items: center;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(ellipse 70% 80% at 75% 30%, #000 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 75% 30%, #000 10%, transparent 70%);
+  opacity: 0.55;
+}
+
+.hero-glow {
+  position: absolute;
+  top: -120px;
+  right: -80px;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 65%);
+  animation: drift 18s ease-in-out infinite;
+}
+
+.hero-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -12px 0 28px;
+  list-style: none;
+
+  li {
+    padding: 3px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+}
+
+// Pipeline card
+.pipeline {
+  padding: 18px 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.pipeline-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.pipeline-branch {
+  padding: 0 8px;
+  border-radius: 4px;
+  background: var(--tag-bg);
+  color: var(--text);
+}
+
+.pipeline-steps {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+
+  li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 12px 72px 1fr;
+    align-items: center;
+    gap: 10px;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 16px;
+      width: 2px;
+      height: 14px;
+      background: var(--border);
+    }
+  }
+}
+
+.pipeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  animation: step-cycle 10s linear infinite;
+  animation-delay: calc(var(--step) * 1.2s);
+}
+
+.pipeline-stage {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.pipeline-tool {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.pipeline-bar {
+  height: 3px;
+  margin-top: 18px;
+  border-radius: 3px;
+  background: var(--tag-bg);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    background: var(--done);
+    transform-origin: left;
+    animation: bar-fill 10s linear infinite;
+  }
+}
+
+// Scroll reveal. Content is only hidden when JS is running (html.js), see ScrollReveal.tsx.
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+// Section heading accent bar grows in.
+.section-heading::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 3px;
+  background: var(--accent);
+  transition: width 0.8s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.js .section-heading[data-reveal]:not(.is-visible)::after {
+  width: 0;
+}
+
+// Experience timeline rail with dots that pop in.
+.timeline-body {
+  position: relative;
+  padding-left: 24px;
+  border-left: 2px solid var(--border);
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    background: var(--bg);
+    transition: transform 0.5s 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+}
+
+.js .timeline-entry[data-reveal]:not(.is-visible) .timeline-body::before {
+  transform: scale(0);
+}
+
+// Hover polish
+.button {
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.button-primary:hover {
+  box-shadow: 0 6px 18px -8px var(--accent);
+}
+
+.button-arrow svg {
+  transition: transform 0.2s ease;
+}
+
+.button-arrow:hover svg {
+  transform: translateX(3px);
+}
+
+.project {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease,
+    opacity 0.7s ease;
+
+  &:hover {
+    border-color: var(--border-strong);
+    box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.35);
+  }
+
+  &.is-visible:hover {
+    transform: translateY(-3px);
+  }
+}
+
+.project-more[open] > .bullets {
+  animation: fade-up 0.35s ease both;
+}
+
+.tags li {
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--accent) 16%, var(--tag-bg));
+  }
+}
+
+.site-header {
+  transition: box-shadow 0.2s ease;
+
+  &[data-scrolled='true'] {
+    box-shadow: 0 6px 20px -14px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.site-nav a {
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy > *,
+  .pipeline,
+  .hero-glow,
+  .pipeline-dot,
+  .pipeline-bar span,
+  .project-more[open] > .bullets {
+    animation: none !important;
+  }
+
+  .pipeline-dot {
+    background: var(--done);
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js .section-heading[data-reveal]:not(.is-visible)::after {
+    width: 40px;
+  }
+
+  .js .timeline-entry[data-reveal]:not(.is-visible) .timeline-body::before {
+    transform: none;
+  }
+
+  .button:hover,
+  .project.is-visible:hover {
+    transform: none;
+  }
+}

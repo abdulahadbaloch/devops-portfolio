@@ -5,29 +5,30 @@ export interface Profile {
   phone: string;
   email: string;
   linkedIn: string;
+  linkedInLabel: string;
+  /** One-line intro under the name in the hero. */
+  intro: string;
+  /** Short description used for SEO metadata and the share image. */
   summary: string;
-  experienceYears: string;
-  terminalSkills: string[];
+  /** First-person About paragraphs. */
+  about: string[];
 }
 
 export const profileData: Profile = {
   name: 'Abdul Ahad',
-  title: 'DevOps Engineer | Cloud Architect',
+  title: 'DevOps Engineer',
   location: 'Islamabad, Pakistan',
   phone: '+92 314 7062005',
   email: 'abdul12101ahad@gmail.com',
-  linkedIn: 'https://www.linkedin.com/in/abdul-ahad-94007a27a?utm_source=share_via&utm_content=profile&utm_medium=member_android',
+  linkedIn: 'https://www.linkedin.com/in/abdul-ahad-94007a27a',
+  linkedInLabel: 'linkedin.com/in/abdul-ahad-94007a27a',
+  intro:
+    'I build and run AWS infrastructure with Terraform, Kubernetes (EKS) and the CI/CD pipelines that deploy to it.',
   summary:
-    'DevOps Engineer with 4+ years of experience designing, deploying, and automating scalable, secure cloud infrastructure on AWS. Skilled in Infrastructure as Code with Terraform and CloudFormation, CI/CD automation with Jenkins, GitHub Actions, and ArgoCD, and container orchestration with Docker and Kubernetes (EKS). Experienced in configuration management, secrets handling, and centralized monitoring across multi-environment production systems. Focused on building reliable, compliant, and cost-efficient cloud environments aligned with AWS best practices.',
-  experienceYears: '4+ years',
-  terminalSkills: [
-    'Terraform',
-    'Kubernetes (EKS)',
-    'Amazon Web Services',
-    'CI/CD Pipelines',
-    'Docker & Microservices',
-    'Ansible & Automation',
-    'Prometheus & Grafana',
-    'Cloud Security & IAM'
+    'DevOps Engineer in Islamabad with 4+ years on AWS: Terraform, CloudFormation, Kubernetes (EKS), Docker and CI/CD with Jenkins, GitHub Actions and ArgoCD.',
+  about: [
+    'I have spent a little over four years working on AWS infrastructure, starting as a junior DevOps engineer and growing into a full DevOps role.',
+    'Most of my day-to-day is Infrastructure as Code with Terraform and CloudFormation, CI/CD pipelines in Jenkins, GitHub Actions and ArgoCD, and running containerised services on EKS and ECS.',
+    'Alongside that I look after secrets management, monitoring, and backup and recovery across development, staging and production environments.'
   ]
 };

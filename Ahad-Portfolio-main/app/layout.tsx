@@ -1,143 +1,86 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { profileData } from '@/data/profile';
-import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/constants';
-import SmoothScrollProvider from '@/components/ui/SmoothScrollProvider';
-import ScrollProgressBar from '@/components/ui/ScrollProgressBar';
-import CustomCursor from '@/components/ui/CustomCursor';
+import { getSiteUrl } from '@/lib/constants';
 import '@/styles/globals.scss';
 
-const inter = Inter({
+const sans = IBM_Plex_Sans({
   subsets: ['latin'],
-  variable: '--font-body',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
   display: 'swap'
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const mono = IBM_Plex_Mono({
   subsets: ['latin'],
+  weight: ['400', '500'],
   variable: '--font-mono',
   display: 'swap'
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL
-  ? process.env.NEXT_PUBLIC_SITE_URL
-  : process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
+const siteUrl = getSiteUrl();
+const pageTitle = `${profileData.name} | ${profileData.title}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: {
-    default: `${profileData.name} | ${profileData.title}`,
-    template: `%s | ${profileData.name}`
-  },
+  title: pageTitle,
   description: profileData.summary,
   authors: [{ name: profileData.name, url: profileData.linkedIn }],
   creator: profileData.name,
-  keywords: [
-    'DevOps Engineer',
-    'Cloud Architect',
-    'AWS Infrastructure',
-    'Terraform',
-    'Kubernetes',
-    'EKS',
-    'CI/CD Automation',
-    'Docker',
-    'Ansible',
-    'Islamabad Pakistan'
-  ],
-  alternates: {
-    canonical: '/'
-  },
+  keywords: ['DevOps Engineer', 'AWS', 'Terraform', 'Kubernetes', 'EKS', 'CI/CD', 'Docker', 'Islamabad'],
+  alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    title: `${profileData.name} | ${profileData.title}`,
+    title: pageTitle,
     description: profileData.summary,
-    siteName: SITE_NAME
+    siteName: profileData.name
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${profileData.name} | ${profileData.title}`,
+    title: pageTitle,
     description: profileData.summary
   },
-  icons: {
-    icon: '/favicon.ico'
-  }
+  icons: { icon: { url: '/favicon.svg', type: 'image/svg+xml' } }
 };
 
 export const viewport: Viewport = {
-  themeColor: '#070b14',
   width: 'device-width',
-  initialScale: 1
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#fafaf8' },
+    { media: '(prefers-color-scheme: dark)', color: '#131518' }
+  ]
 };
 
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  const personJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: profileData.name,
-    jobTitle: 'DevOps Engineer | Cloud Architect',
-    description: profileData.summary,
-    url: siteUrl,
-    sameAs: [profileData.linkedIn],
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Islamabad',
-      addressCountry: 'Pakistan'
-    },
-    alumniOf: {
-      '@type': 'EducationalOrganization',
-      name: 'Gomal University'
-    },
-    knowsAbout: [
-      'AWS',
-      'Terraform',
-      'Kubernetes',
-      'Docker',
-      'CI/CD Pipelines',
-      'Cloud Architecture',
-      'Ansible',
-      'Prometheus',
-      'Grafana'
-    ]
-  };
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profileData.name,
+  jobTitle: profileData.title,
+  description: profileData.summary,
+  url: siteUrl,
+  email: `mailto:${profileData.email}`,
+  sameAs: [profileData.linkedIn],
+  address: { '@type': 'PostalAddress', addressLocality: 'Islamabad', addressCountry: 'PK' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Gomal University' },
+  knowsAbout: ['AWS', 'Terraform', 'Kubernetes', 'Docker', 'CI/CD', 'Ansible', 'Prometheus', 'Grafana']
+};
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
-    >
-      <head>
+    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${mono.variable}`}>
+      <body>
+        {/* Marks JS as available so scroll-reveal styles only apply when they can be undone. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-      </head>
-      <body>
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="dark"
-          enableSystem={true}
-          disableTransitionOnChange
-        >
-          <SmoothScrollProvider>
-            <ScrollProgressBar />
-            <CustomCursor />
-            <div className="ambient-bg" aria-hidden="true">
-              <div className="ambient-glow-1" />
-              <div className="ambient-glow-2" />
-              <div className="grid-pattern" />
-            </div>
-            {children}
-          </SmoothScrollProvider>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
         </ThemeProvider>
       </body>
     </html>

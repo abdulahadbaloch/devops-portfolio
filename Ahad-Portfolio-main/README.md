@@ -1,84 +1,45 @@
-# Abdul Ahad — DevOps Engineer & Cloud Architect Portfolio
+# Abdul Ahad: Portfolio
 
-A modern, production-grade personal portfolio built with **Next.js (App Router)**, **TypeScript**, **Bootstrap 5 via custom SCSS**, **Framer Motion**, **GSAP ScrollTrigger**, and **Lenis Smooth Scroll**.
+Personal site built with Next.js 14 (App Router), TypeScript and plain SCSS.
 
----
+## Run it
 
-## Tech Stack
-
-- **Framework**: Next.js 14 (App Router) + TypeScript
-- **Styling**: Bootstrap 5 customized via SCSS (`styles/_bootstrap-custom.scss`, `styles/_variables.scss`), dark default mode with `next-themes`
-- **Components**: `react-bootstrap` (Navbar, Offcanvas, Modal)
-- **Animations**: `framer-motion` (reveals, micro-interactions, layout transitions), `gsap` + `ScrollTrigger` (experience timeline), `@studio-freight/lenis` (smooth scroll)
-- **Forms**: `react-hook-form` + `zod` with graceful mailto fallback
-- **Icons**: `react-icons`
-
----
-
-## Getting Started
-
-### 1. Install Dependencies
 ```bash
 npm install
-```
-
-### 2. Run Locally
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view the site in your browser.
-
-### 3. Build & Production Start
-```bash
-npm run build
-npm run start
-```
-
-### 4. Code Quality & Type Check
-```bash
+npm run dev        # http://localhost:3000
+npm run build && npm start
 npm run lint
 npm run typecheck
 ```
 
----
+Requires Node 20 or newer.
 
-## Environment Variables
+## Where things live
 
-All environment variables are optional. The portfolio is preconfigured to function without any required variables.
+| What | File |
+|---|---|
+| Name, contact details, intro, About text | `data/profile.ts` |
+| Jobs | `data/experience.ts` |
+| Projects | `data/projects.ts` |
+| Skills | `data/skills.ts` |
+| Education | `data/education.ts` |
+| Styles and colours (light and dark) | `styles/globals.scss` |
+| Résumé PDF | `public/Abdul_Ahad_DevOps_Resume.pdf` |
 
-See `.env.example`:
-```env
-# Optional Resend credentials for contact form submissions.
-# If omitted or if sending fails, the contact form seamlessly falls back to opening prefilled mailto:abdul12101ahad@gmail.com
-RESEND_API_KEY=
-CONTACT_TO_EMAIL=abdul12101ahad@gmail.com
+To update the résumé, replace the PDF and keep the same filename (or change `RESUME_PATH` in `lib/constants.ts`).
 
-# Optional custom site canonical URL
-NEXT_PUBLIC_SITE_URL=https://abdulahad.dev
-```
+## Contact form
 
----
+The form posts to `/api/contact`, which sends email through [Resend](https://resend.com). Set these in `.env.local` or in your host's environment settings:
 
-## Managing the CV / Resume
+- `RESEND_API_KEY`: required for the form to send.
+- `CONTACT_TO_EMAIL`: inbox to deliver to (defaults to the email in `data/profile.ts`).
+- `CONTACT_FROM_EMAIL`: sender on a domain you have verified in Resend.
 
-The resume file is served directly from the Next.js `public/` directory:
-- Path: `public/Abdul_Ahad_DevOps_Resume.pdf`
-- Referenced throughout the site as `/Abdul_Ahad_DevOps_Resume.pdf` via `lib/constants.ts`
+Without a key, the form says it can't send and offers to open the visitor's email app with the message filled in. It never reports success unless the email was accepted. The endpoint validates input, caps lengths, rate-limits to 5 messages per IP per 10 minutes, and has a hidden honeypot field to catch bots.
 
-### How to update or replace the CV:
-To update the CV, simply replace the file at:
-```
-public/Abdul_Ahad_DevOps_Resume.pdf
-```
-Ensure the filename matches exactly: `Abdul_Ahad_DevOps_Resume.pdf`.
+## Deploy (Vercel)
 
----
-
-## Deploy to Vercel
-
-This repository is ready to deploy on Vercel with zero manual configuration:
-1. Push your repository to GitHub, GitLab, or Bitbucket.
-2. In the Vercel dashboard, click **Add New** &rarr; **Project** and import this repository.
-3. Keep the default Next.js build settings (`npm run build`).
-4. (Optional) Add your `RESEND_API_KEY` and `CONTACT_TO_EMAIL` environment variables in Project Settings &rarr; Environment Variables.
-5. Click **Deploy**.
+1. Push the repo to GitHub and import it in Vercel.
+2. Add the environment variables above, plus `NEXT_PUBLIC_SITE_URL` once you have a domain.
+3. Deploy.

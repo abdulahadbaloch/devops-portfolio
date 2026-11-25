@@ -5,9 +5,26 @@ export interface SkillCategory {
 
 export const skillsData: SkillCategory[] = [
   {
-    category: 'Cloud Platform',
+    category: 'AWS',
     skills: [
-      'AWS (EC2, S3, RDS, Lambda, IAM, VPC, Route 53, CloudFront, ECS, EKS, CloudWatch, CloudFormation, API Gateway, DynamoDB, EBS, S3 Glacier, AWS CLI, AWS Secrets Manager)'
+      'EC2',
+      'S3',
+      'RDS',
+      'Lambda',
+      'IAM',
+      'VPC',
+      'Route 53',
+      'CloudFront',
+      'ECS',
+      'EKS',
+      'CloudWatch',
+      'CloudFormation',
+      'API Gateway',
+      'DynamoDB',
+      'EBS',
+      'S3 Glacier',
+      'AWS CLI',
+      'AWS Secrets Manager'
     ]
   },
   {
