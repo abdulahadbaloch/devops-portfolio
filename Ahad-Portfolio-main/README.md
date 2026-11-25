@@ -38,8 +38,19 @@ The form posts to `/api/contact`, which sends email through [Resend](https://res
 
 Without a key, the form says it can't send and offers to open the visitor's email app with the message filled in. It never reports success unless the email was accepted. The endpoint validates input, caps lengths, rate-limits to 5 messages per IP per 10 minutes, and has a hidden honeypot field to catch bots.
 
-## Deploy (Vercel)
+## Deploy (GitHub Actions → Vercel)
 
-1. Push the repo to GitHub and import it in Vercel.
-2. Add the environment variables above, plus `NEXT_PUBLIC_SITE_URL` once you have a domain.
-3. Deploy.
+Every push to `main` runs `.github/workflows/deploy.yml` (at the repo root):
+
+1. **check**: `npm ci`, lint, type-check and production build.
+2. **deploy**: only if `check` passes, builds with the Vercel CLI and deploys to production.
+
+Pull requests run `check` only. The workflow needs these repository secrets:
+
+| Secret | Where to get it |
+|---|---|
+| `VERCEL_TOKEN` | vercel.com → Account Settings → Tokens |
+| `VERCEL_ORG_ID` | `orgId` in `.vercel/project.json` after `npx vercel link` |
+| `VERCEL_PROJECT_ID` | `projectId` in the same file |
+
+Contact-form variables (above) go in the Vercel project's Environment Variables; `vercel pull` brings them into the build. To deploy by hand instead: `npx vercel deploy --prod` from this folder.
